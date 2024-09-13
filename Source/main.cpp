@@ -1,17 +1,29 @@
+// IBTISAM ADIL
+
 #include "galba.h"
 
-/* 
-	Instructions:
+constexpr float SQUARE_X_SPEED_PIXELS = 3.0f;
+constexpr int SQUARE_SIZE_PIXELS = 32;
 
-	Edit the content of the render() function.
+struct Square {
+	float x_position_in_pixels = 0.0f;
+	float x_facing_directions = 1.0f;
+};
 
-	DO NOT add nor edit any code in the main() function, except where you have permission to do so.
-*/
+Square john = Square{};
 
-
-void input()
+void game_init() 
 {
-	// INFO: You should't need to put code here but you can do it if you wish.
+	int window_width = get_window_width();
+	john.x_position_in_pixels = window_width * 0.5f;
+}
+
+void update() {
+	if (is_key_pressed(Key::Space))
+	{
+		john.x_facing_directions = -john.x_facing_directions;
+	}
+	john.x_position_in_pixels += john.x_facing_directions * SQUARE_X_SPEED_PIXELS;
 }
 
 void render()
@@ -21,11 +33,9 @@ void render()
 	int window_width  = get_window_width();
 	int window_height = get_window_height();
 
-	int circle_radius = round_to_int(fminf(window_width * 0.1f, window_height * 0.1f));
-
-	int circle_center_x = round_to_int(window_width * 0.5f);
-	int circle_center_y = round_to_int(window_height * 0.5f);
-	draw_circle(circle_center_x, circle_center_y, circle_radius);
+	int square_x = round_to_int(john.x_position_in_pixels);
+	int square_y = round_to_int(window_height * 0.5f);
+	draw_rectangle(square_x, square_y, SQUARE_SIZE_PIXELS, SQUARE_SIZE_PIXELS);
 }
 
 int main()
@@ -36,7 +46,7 @@ int main()
 
 	while (is_window_open())
 	{
-		input();
+		update();
 
 		clear_window();
 		render();
